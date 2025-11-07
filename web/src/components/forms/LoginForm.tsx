@@ -18,6 +18,13 @@ export default function LoginForm() {
     login({ email, password })
   }
 
+  const handlePrefill = () => {
+    setEmail('test@example.com')
+    setPassword('password123')
+  }
+
+  const isDev = process.env.NODE_ENV === 'development'
+
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
@@ -25,6 +32,13 @@ export default function LoginForm() {
         <CardDescription className="text-center">
           Enter your email and password to sign in to your account
         </CardDescription>
+        {isDev && (
+          <div className="flex justify-center pt-2">
+            <Button type="button" variant="outline" size="sm" onClick={handlePrefill} className="text-xs">
+              🧪 Prefill Form (Dev Only)
+            </Button>
+          </div>
+        )}
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">

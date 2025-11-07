@@ -113,11 +113,39 @@ export default function RegisterForm() {
   const isFormValid =
     !Object.values(errors).some(error => error) && formData.email && formData.password && formData.confirmPassword
 
+  const handlePrefill = () => {
+    const prefillData: RegisterFormData = {
+      firstName: 'John',
+      lastName: 'Doe',
+      email: 'test@example.com',
+      password: 'password123',
+      confirmPassword: 'password123',
+    }
+    setFormData(prefillData)
+    // Mark all fields as touched to show validation
+    const allTouched = Object.keys(prefillData).reduce(
+      (acc, key) => ({ ...acc, [key]: true }),
+      {} as Record<keyof RegisterFormData, boolean>
+    )
+    setTouched(allTouched)
+    // Clear errors since we're prefilling valid data
+    setErrors({})
+  }
+
+  const isDev = process.env.NODE_ENV === 'development'
+
   return (
     <Card className="w-full max-w-md">
       <CardHeader className="space-y-1">
         <CardTitle className="text-2xl font-bold text-center">Create an account</CardTitle>
         <CardDescription className="text-center">Enter your information to create your account</CardDescription>
+        {isDev && (
+          <div className="flex justify-center pt-2">
+            <Button type="button" variant="outline" size="sm" onClick={handlePrefill} className="text-xs">
+              🧪 Prefill Form (Dev Only)
+            </Button>
+          </div>
+        )}
       </CardHeader>
       <form onSubmit={handleSubmit}>
         <CardContent className="space-y-4">
