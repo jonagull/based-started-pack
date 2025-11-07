@@ -2,6 +2,7 @@ using BackendApi.Entities;
 using BackendApi.Models.Auth;
 using BackendApi.Repositories.User;
 using BackendApi.Services.Jwt;
+using UserEntity = BackendApi.Entities.User;
 
 namespace BackendApi.Services.Auth;
 
@@ -89,7 +90,7 @@ public class AuthService(
         }
 
         // Create new user
-        var user = new User
+        var user = new UserEntity
         {
             Email = request.Email,
             PasswordHash = BCrypt.Net.BCrypt.HashPassword(request.Password),
@@ -152,9 +153,74 @@ public class AuthService(
         return (false, null, "Invalid client type");
     }
 
-    public async Task<User?> GetUserByIdAsync(Guid userId)
+    public async Task<(bool success, AuthSdto? response, string? error)> RefreshTokenAsync()
     {
-        return await userRepository.GetByIdAsync(userId);
+        var httpContext = httpContextAccessor.HttpContext;
+        if (httpContext == null)
+        {
+            return (false, null, "HTTP context not available");
+        }
+
+        // Get refresh token from cookie
+        if (!httpContext.Request.Cookies.TryGetValue("RefreshToken", out var refreshToken) || string.IsNullOrEmpty(refreshToken))
+        {
+            return (false, null, "Refresh token not found");
+        }
+
+        // Get access token from cookie to extract user info
+        if (!httpContext.Request.Cookies.TryGetValue("AccessToken", out var oldAccessToken) || string.IsNullOrEmpty(oldAccessToken))
+        {
+            return (false, null, "Access token not found");
+        }
+
+        // Validate the old access token to get user info
+        var principal = jwtService.ValidateToken(oldAccessToken);
+        if (principal == null)
+        {
+            return (false, null, "Invalid access token");
+        }
+
+        var userIdClaim = principal.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        if (string.IsNullOrEmpty(userIdClaim) || !Guid.TryParse(userIdClaim, out var userId))
+        {
+            return (false, null, "Invalid user ID in token");
+        }
+
+        // Get user from database
+        var user = await userRepository.GetByIdAsync(userId);
+        if (user == null || !user.IsActive)
+        {
+            return (false, null, "User not found or inactive");
+        }
+
+        // Generate new tokens
+        var newAccessToken = jwtService.GenerateAccessToken(user);
+        var newRefreshToken = jwtService.GenerateRefreshToken();
+        var expiresAt = DateTime.UtcNow.AddMinutes(int.Parse(configuration["Jwt:AccessTokenExpirationMinutes"] ?? "15"));
+
+        // Set new tokens in cookies
+        var cookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = expiresAt
+        };
+
+        httpContext.Response.Cookies.Append("AccessToken", newAccessToken, cookieOptions);
+
+        var refreshCookieOptions = new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = true,
+            SameSite = SameSiteMode.Strict,
+            Expires = DateTime.UtcNow.AddDays(7)
+        };
+
+        httpContext.Response.Cookies.Append("RefreshToken", newRefreshToken, refreshCookieOptions);
+
+        // Return response (tokens are in cookies for web clients)
+        return (true, new AuthSdto { ExpiresAt = expiresAt }, null);
     }
 
     public async Task<bool> LogoutAsync()

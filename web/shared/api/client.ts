@@ -43,7 +43,7 @@ apiClient.interceptors.response.use(
     if (!originalRequest) return Promise.reject(error)
 
     // Don't try to refresh for auth endpoints
-    const isAuthEndpoint = originalRequest.url?.includes('/auth/')
+    const isAuthEndpoint = originalRequest.url?.includes('/api/auth/')
 
     if (error.response?.status === 401 && !originalRequest._retry && !isAuthEndpoint) {
       if (isRefreshing) {
@@ -56,7 +56,7 @@ apiClient.interceptors.response.use(
       isRefreshing = true
 
       try {
-        await apiClient.post('/auth/refresh')
+        await apiClient.post('/api/auth/refresh')
         processQueue(null)
         return apiClient(originalRequest)
       } catch (refreshError) {

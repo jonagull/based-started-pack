@@ -2,13 +2,12 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using BackendApi.Models;
 using BackendApi.Models.Auth;
-using BackendApi.Models.User;
 using BackendApi.Services.Auth;
 
 namespace BackendApi.Controllers;
 
 [ApiController]
-[Route("auth")]
+[Route("api/[controller]")]
 public class AuthController(IAuthService authService) : ControllerBase
 {
     [HttpPost("login")]
@@ -59,45 +58,27 @@ public class AuthController(IAuthService authService) : ControllerBase
         });
     }
 
-    [HttpGet("me")]
-    [Authorize]
-    public async Task<ActionResult<ApiResponse<UserSdto>>> GetCurrentUser()
+    [HttpPost("refresh")]
+    [AllowAnonymous]
+    public async Task<ActionResult<ApiResponse<AuthSdto>>> Refresh()
     {
-        var userId = User.FindFirst(System.Security.Claims.ClaimTypes.NameIdentifier)?.Value;
+        var (success, response, error) = await authService.RefreshTokenAsync();
 
-        if (string.IsNullOrEmpty(userId))
-            return Ok(new ApiResponse<UserSdto>
+        if (!success)
+            return Ok(new ApiResponse<AuthSdto>
             {
                 Success = false,
                 StatusCode = ApiResponseStatusCode.Unauthorized,
-                Message = "User not authenticated",
+                Message = error,
                 Data = null
             });
 
-        var user = await authService.GetUserByIdAsync(Guid.Parse(userId));
-
-        if (user == null)
-            return Ok(new ApiResponse<UserSdto>
-            {
-                Success = false,
-                StatusCode = ApiResponseStatusCode.NotFound,
-                Message = "User not found",
-                Data = null
-            });
-
-        return Ok(new ApiResponse<UserSdto>
+        return Ok(new ApiResponse<AuthSdto>
         {
             Success = true,
             StatusCode = ApiResponseStatusCode.Success,
-            Message = null,
-            Data = new UserSdto
-            {
-                Id = user.Id,
-                Email = user.Email,
-                FirstName = user.FirstName,
-                LastName = user.LastName,
-                IsActive = user.IsActive
-            }
+            Message = "Token refreshed successfully",
+            Data = response
         });
     }
 

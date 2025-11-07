@@ -3,12 +3,13 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.IdentityModel.Tokens;
 using BackendApi.Entities;
+using UserEntity = BackendApi.Entities.User;
 
 namespace BackendApi.Services.Jwt;
 
 public interface IJwtService
 {
-    string GenerateAccessToken(User user);
+    string GenerateAccessToken(UserEntity user);
     string GenerateRefreshToken();
     ClaimsPrincipal? ValidateToken(string token);
 }
@@ -30,7 +31,7 @@ public class JwtService : IJwtService
         _accessTokenExpirationMinutes = int.Parse(_configuration["Jwt:AccessTokenExpirationMinutes"] ?? "15");
     }
 
-    public string GenerateAccessToken(User user)
+    public string GenerateAccessToken(UserEntity user)
     {
         var tokenHandler = new JwtSecurityTokenHandler();
         var key = Encoding.UTF8.GetBytes(_secretKey);

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { authApi, useAuthStore, LoginRdto, RegisterRdto } from '@shared'
+import { authApi, userApi, useAuthStore, LoginRdto, RegisterRdto } from '@shared'
 
 import { useRouter } from 'next/navigation'
 import { useEffect } from 'react'
@@ -60,7 +60,7 @@ export const useUser = () => {
 
   const query = useQuery({
     queryKey: ['user'],
-    queryFn: authApi.getCurrentUser,
+    queryFn: userApi.getCurrentUser,
     retry: false,
     staleTime: 5 * 60 * 1000,
     gcTime: 10 * 60 * 1000,

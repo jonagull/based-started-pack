@@ -309,19 +309,19 @@ pnpm remove package-name`}</code>
                     <div className="space-y-2 text-sm">
                       <div className="grid grid-cols-3 gap-2">
                         <code className="bg-muted px-2 py-1 rounded">POST</code>
-                        <code className="col-span-2">/auth/register</code>
+                        <code className="col-span-2">/api/auth/register</code>
                       </div>
                       <div className="grid grid-cols-3 gap-2">
                         <code className="bg-muted px-2 py-1 rounded">POST</code>
-                        <code className="col-span-2">/auth/login</code>
+                        <code className="col-span-2">/api/auth/login</code>
                       </div>
                       <div className="grid grid-cols-3 gap-2">
                         <code className="bg-muted px-2 py-1 rounded">POST</code>
-                        <code className="col-span-2">/auth/logout</code>
+                        <code className="col-span-2">/api/auth/refresh</code>
                       </div>
                       <div className="grid grid-cols-3 gap-2">
-                        <code className="bg-muted px-2 py-1 rounded">GET</code>
-                        <code className="col-span-2">/auth/me</code>
+                        <code className="bg-muted px-2 py-1 rounded">POST</code>
+                        <code className="col-span-2">/api/auth/logout</code>
                       </div>
                     </div>
                   </div>
@@ -331,19 +331,11 @@ pnpm remove package-name`}</code>
                     <div className="space-y-2 text-sm">
                       <div className="grid grid-cols-3 gap-2">
                         <code className="bg-muted px-2 py-1 rounded">GET</code>
-                        <code className="col-span-2">/users</code>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2">
-                        <code className="bg-muted px-2 py-1 rounded">GET</code>
-                        <code className="col-span-2">/users/{'{id}'}</code>
+                        <code className="col-span-2">/api/user</code>
                       </div>
                       <div className="grid grid-cols-3 gap-2">
                         <code className="bg-muted px-2 py-1 rounded">PUT</code>
-                        <code className="col-span-2">/users/{'{id}'}</code>
-                      </div>
-                      <div className="grid grid-cols-3 gap-2">
-                        <code className="bg-muted px-2 py-1 rounded">DELETE</code>
-                        <code className="col-span-2">/users/{'{id}'}</code>
+                        <code className="col-span-2">/api/user</code>
                       </div>
                     </div>
                   </div>

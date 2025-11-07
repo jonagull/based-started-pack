@@ -1,6 +1,7 @@
+using BackendApi.Repositories.User;
 using BackendApi.Services.Auth;
 using BackendApi.Services.Jwt;
-using BackendApi.Repositories.User;
+using BackendApi.Services.User;
 
 namespace BackendApi.Configuration;
 
@@ -14,6 +15,7 @@ public static class DependencyInjectionConfiguration
         // Services
         services.AddScoped<IJwtService, JwtService>();
         services.AddScoped<IAuthService, AuthService>();
+        services.AddScoped<IUserService, UserService>();
 
         // Repositories
         services.AddScoped<IUserRepository, UserRepository>();
