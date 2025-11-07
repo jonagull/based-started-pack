@@ -6,6 +6,42 @@ A modern full-stack application built with Next.js and .NET, featuring JWT authe
 
 **Prerequisites:** .NET 8.0 SDK, Node.js 18+, pnpm 8+, Docker
 
+### First Time Setup
+
+**If this is your first time using the project**, run the setup script:
+
+```bash
+./setup.sh
+```
+
+This script will:
+
+-   ✓ Check if Docker, Node.js, .NET SDK, and pnpm are installed
+-   ✓ Install pnpm if missing
+-   ✓ Install frontend dependencies
+-   ✓ Start PostgreSQL database
+-   ✓ Run database migrations
+-   ✓ Start backend and frontend concurrently
+
+**That's it!** Everything runs in one window. Press `Ctrl+C` to stop.
+
+### Running the Project
+
+**If you've already run the setup script**, use the start script to quickly run the services:
+
+```bash
+./start.sh
+```
+
+This script will:
+
+-   ✓ Start PostgreSQL database
+-   ✓ Start backend and frontend concurrently
+
+**Note:** Use `./setup.sh` for first-time setup. Use `./start.sh` for subsequent runs.
+
+### Option 2: Manual Setup
+
 1. **Start the database:**
 
     ```bash
@@ -29,8 +65,6 @@ A modern full-stack application built with Next.js and .NET, featuring JWT authe
     pnpm dev
     ```
     App runs at `http://localhost:3000`
-
-**That's it!** Migrations run automatically on backend startup.
 
 ---
 
