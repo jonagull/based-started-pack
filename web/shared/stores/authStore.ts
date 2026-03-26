@@ -49,7 +49,8 @@ export const useAuthStore = create<AuthStore>()(
 
           const now = new Date()
           const bufferTime = 60 * 1000
-          return now.getTime() > expiresAt.getTime() - bufferTime
+          const expiresAtDate = expiresAt instanceof Date ? expiresAt : new Date(expiresAt)
+          return now.getTime() > expiresAtDate.getTime() - bufferTime
         },
       }),
       {
