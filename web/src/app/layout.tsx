@@ -1,7 +1,10 @@
 import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
-import { Header } from '@/components/Header'
+import { AppShell } from '@/components/AppShell'
+
+const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
   title: 'App',
@@ -15,10 +18,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className={`${inter.className} min-h-screen flex flex-col antialiased`}>
         <Providers>
-          <Header />
-          {children}
+          <AppShell>
+            {children}
+          </AppShell>
         </Providers>
       </body>
     </html>

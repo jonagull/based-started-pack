@@ -1,32 +1,28 @@
 'use client'
 
 import { useAuthCheck } from '@shared'
-import ContentWrapper from '@/components/layout/ContentWrapper'
+import Link from 'next/link'
+import { Button } from '@/components/ui/button'
 
 export default function Home() {
   useAuthCheck()
 
   return (
-    <ContentWrapper>
-      <div className="max-w-4xl mx-auto text-center space-y-6 py-12">
-        <h1 className="text-5xl font-bold">Hello World!</h1>
-        <p className="text-xl text-muted-foreground">
-          Your full-stack application is ready to go. Start building your features!
+    <div className="flex flex-1 items-center justify-center p-8">
+      <div className="max-w-xl w-full text-center space-y-6">
+        <h1 className="text-4xl font-bold tracking-tight">App</h1>
+        <p className="text-muted-foreground text-lg">
+          Your starting point. Start building your features.
         </p>
-        <div className="pt-8">
-          <p className="text-sm text-muted-foreground">
-            Check out the{' '}
-            <a href="/docs" className="text-blue-600 hover:underline">
-              docs
-            </a>{' '}
-            to learn how to add new features, or view the{' '}
-            <a href="/structure" className="text-blue-600 hover:underline">
-              project structure
-            </a>
-            .
-          </p>
+        <div className="flex items-center justify-center gap-3 pt-2">
+          <Button asChild variant="outline" size="sm">
+            <Link href="/docs">Docs</Link>
+          </Button>
+          <Button asChild variant="outline" size="sm">
+            <Link href="/structure">Structure</Link>
+          </Button>
         </div>
       </div>
-    </ContentWrapper>
+    </div>
   )
 }
