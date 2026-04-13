@@ -4,10 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Full-stack starter template: **Next.js 15 + React 19** frontend with a **.NET 8.0** backend, PostgreSQL database, and JWT authentication.
+Full-stack starter template: **Next.js 15 + React 19** frontend with a **.NET 9.0** backend, PostgreSQL database, and JWT authentication.
 
 - Frontend: `http://localhost:3000`
-- Backend: `http://localhost:5157` (Swagger at `/swagger`)
+- Backend: `http://localhost:5157` (API docs at `/scalar/v1`)
 
 ## Commands
 
